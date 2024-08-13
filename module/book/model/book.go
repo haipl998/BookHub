@@ -17,6 +17,12 @@ type BookCreation struct {
 	CategoryID    int    `json:"CategoryID,omitempty" gorm:"column:CategoryID"`
 }
 
+type BookUpdate struct {
+	Title         string `json:"Title" gorm:"column:Title"`
+	ISBN          string `json:"ISBN" gorm:"column:ISBN"`
+	PublishedYear int    `json:"PublishedYear" gorm:"column:PublishedYear"`
+}
+
 type Categories struct {
 	CategoryID   int    `json:"CategoryID,omitempty" gorm:"primaryKey;column:CategoryID"`
 	CategoryName string `json:"CategoryName" gorm:"column:CategoryName"`
@@ -35,6 +41,7 @@ type Authors struct {
 
 func (Book) TableName() string         { return "Books" }
 func (BookCreation) TableName() string { return Book{}.TableName() }
+func (BookUpdate) TableName() string   { return Book{}.TableName() }
 func (Categories) TableName() string   { return "Categories" }
 func (BookAuthors) TableName() string  { return "BookAuthors" }
 func (Authors) TableName() string      { return "Authors" }
