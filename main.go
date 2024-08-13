@@ -22,6 +22,7 @@ func main() {
 	{
 		api.GET("/book", ginbook.GetListOfBooks(db)) // get list book
 		api.GET("/book/:id", ginbook.GetBook(db))    // get book by id
+		api.POST("/book", ginbook.CreateBook(db))    // create new book
 	}
 	log.Print(api)
 
