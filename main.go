@@ -1,8 +1,8 @@
 package main
 
 import (
+	ginbook "BookHub/module/book/transport/gin"
 	"log"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
@@ -15,15 +15,14 @@ func main() {
 	if err != nil {
 		log.Fatalln("Cannot connect to MySQL:", err)
 	}
-	log.Print("connect database successful")
-	log.Print(db)
 
 	router := gin.Default()
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
+
+	api := router.Group("/api")
+	{
+		api.GET("/book", ginbook.GetListOfBooks(db)) // get list book
+	}
+	log.Print(api)
 
 	router.Run()
 }
