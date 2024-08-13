@@ -21,6 +21,7 @@ func main() {
 	api := router.Group("/api")
 	{
 		api.GET("/book", ginbook.GetListOfBooks(db)) // get list book
+		api.GET("/book/:id", ginbook.GetBook(db))    // get book by id
 	}
 	log.Print(api)
 
