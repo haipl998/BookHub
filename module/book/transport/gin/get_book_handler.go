@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func GetBook(db *gorm.DB) gin.HandlerFunc {
+func GetBookById(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
