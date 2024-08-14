@@ -1,6 +1,7 @@
 package ginbook
 
 import (
+	"BookHub/common"
 	"BookHub/module/book/biz"
 	"BookHub/module/book/model"
 	"BookHub/module/book/storage"
@@ -50,6 +51,6 @@ func CreateBook(db *gorm.DB) gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"data": book.BookID})
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(book.BookID))
 	}
 }
