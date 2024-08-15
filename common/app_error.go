@@ -116,3 +116,4 @@ func ErrorPermission(err error) *AppError {
 }
 
 var RecordNotFound = errors.New("record not found")
+var EntityExisted = errors.New("Entity existed")

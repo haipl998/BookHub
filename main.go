@@ -1,6 +1,7 @@
 package main
 
 import (
+	ginauthor "BookHub/module/author/transport/gin"
 	ginbook "BookHub/module/book/transport/gin"
 	"log"
 
@@ -20,11 +21,18 @@ func main() {
 
 	api := router.Group("/api")
 	{
+		//book
 		api.GET("/book", ginbook.GetListOfBooks(db))        // get list book
 		api.GET("/book/:id", ginbook.GetBookById(db))       // get book by id
 		api.POST("/book", ginbook.CreateBook(db))           // create new book
 		api.PUT("/book/:id", ginbook.UpdateBookById(db))    // update book
 		api.DELETE("/book/:id", ginbook.DeleteBookById(db)) // delete book
+
+		//author
+		api.GET("/author", ginauthor.GetListOfAuthors(db))
+		api.GET("/author/:id", ginauthor.GetAuthorById(db))
+		api.POST("/author", ginauthor.CreateAuthor(db))
+		api.PUT("/author/:id", ginauthor.UpdatAuthorByID(db))
 	}
 	router.Run()
 }
