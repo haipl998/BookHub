@@ -16,13 +16,13 @@ func UpdateBookById(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 			return
 		}
 
 		var book model.BookUpdate
 		if err := c.ShouldBind(&book); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 			return
 		}
 
@@ -30,7 +30,7 @@ func UpdateBookById(db *gorm.DB) gin.HandlerFunc {
 		business := biz.NewUpdateBookByIdBiz(store)
 
 		if err := business.UpdateBookById(c.Request.Context(), id, &book); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusBadRequest, err)
 			return
 		}
 		c.JSON(http.StatusOK, common.SimpleSuccessResponse("true"))

@@ -1,5 +1,18 @@
 package model
 
+import "errors"
+
+const (
+	EntityName = "book"
+)
+
+var (
+	ErrTitleIsBlank        = errors.New("title cannot be blank")
+	ErrCategoryNameIsBlank = errors.New("category name cannot be blank")
+	ErrFirstNameIsBlank    = errors.New("first name cannot be blank")
+	ErrLastNameIsBlank     = errors.New("last name cannot be blank")
+)
+
 type Book struct {
 	BookID        int    `json:"BookID,omitempty" gorm:"primaryKey;column:BookID"`
 	Title         string `json:"Title" gorm:"column:Title"`
