@@ -1,11 +1,10 @@
 package biz
 
 import (
+	"BookHub/common"
 	"BookHub/module/book/model"
 	"context"
 	"errors"
-
-	"gorm.io/gorm"
 )
 
 type UpdateBookStorage interface {
@@ -24,14 +23,14 @@ func NewUpdateBookByIdBiz(store UpdateBookStorage) *updateBookBiz {
 func (biz *updateBookBiz) UpdateBookById(ctx context.Context, id int, data *model.BookUpdate) (err error) {
 	_, err = biz.store.GetBook(ctx, map[string]interface{}{"Books.BookID": id})
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return errors.New("Book not found")
+		if errors.Is(err, common.RecordNotFound) {
+			return common.ErrorCannotGetEntity(model.EntityName, err)
 		}
-		return err
+		return common.ErrorCannotUpdaterEntity(model.EntityName, err)
 	}
 
 	if err = biz.store.UpdateBook(ctx, map[string]interface{}{"Books.BookID": id}, data); err != nil {
-		return err
+		return common.ErrorCannotUpdaterEntity(model.EntityName, err)
 	}
 	return nil
 

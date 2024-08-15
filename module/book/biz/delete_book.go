@@ -1,11 +1,10 @@
 package biz
 
 import (
+	"BookHub/common"
 	"BookHub/module/book/model"
 	"context"
 	"errors"
-
-	"gorm.io/gorm"
 )
 
 type DeleteBookStorage interface {
@@ -24,14 +23,14 @@ func NewDeleteBookByIdBiz(store DeleteBookStorage) *deleteBookBiz {
 func (biz *deleteBookBiz) DeleteBookById(ctx context.Context, id int) (err error) {
 	_, err = biz.store.GetBook(ctx, map[string]interface{}{"Books.BookID": id})
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return errors.New("book not found")
+		if errors.Is(err, common.RecordNotFound) {
+			return common.ErrorCannotGetEntity(model.EntityName, err)
 		}
-		return err
+		return common.ErrorCannotDeleteEntity(model.EntityName, err)
 	}
 
 	if err = biz.store.DeleteBook(ctx, id); err != nil {
-		return err
+		return common.ErrorCannotDeleteEntity(model.EntityName, err)
 	}
 	return nil
 

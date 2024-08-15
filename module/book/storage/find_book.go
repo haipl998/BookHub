@@ -1,8 +1,10 @@
 package storage
 
 import (
+	"BookHub/common"
 	"BookHub/module/book/model"
 	"context"
+	"errors"
 )
 
 func (s *sqlStore) GetBook(ctx context.Context, cond map[string]interface{}) (book *model.Book, err error) {
@@ -13,7 +15,10 @@ func (s *sqlStore) GetBook(ctx context.Context, cond map[string]interface{}) (bo
 		Joins("join Authors on BookAuthors.AuthorID = Authors.AuthorID").
 		Where(cond).
 		First(&book).Error; err != nil {
-		return nil, err
+		if errors.Is(err, common.RecordNotFound) {
+			return nil, common.RecordNotFound
+		}
+		return nil, common.ErrDB(err)
 	}
 
 	return book, nil

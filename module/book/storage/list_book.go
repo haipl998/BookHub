@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"BookHub/common"
 	"BookHub/module/book/model"
 	"context"
 )
@@ -12,8 +13,7 @@ func (s *sqlStore) ListBook(ctx context.Context) (result []model.Book, er error)
 		Joins("join Categories on Books.CategoryID = Categories.CategoryID").Joins("JOIN BookAuthors on Books.BookID = BookAuthors.BookID").
 		Joins("join Authors on BookAuthors.AuthorID = Authors.AuthorID").
 		Find(&result).Error; err != nil {
-		return nil, err
+		return nil, common.ErrDB(err)
 	}
-
 	return result, nil
 }
