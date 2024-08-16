@@ -2,6 +2,7 @@ package main
 
 import (
 	ginbook "BookHub/module/book/transport/gin"
+	gincategory "BookHub/module/category/transport/gin"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -25,6 +26,12 @@ func main() {
 		api.POST("/book", ginbook.CreateBook(db))           // create new book
 		api.PUT("/book/:id", ginbook.UpdateBookById(db))    // update book
 		api.DELETE("/book/:id", ginbook.DeleteBookById(db)) // delete book
+
+		// category
+		api.GET("/category", gincategory.GetCategoryOfCategories(db))
+		api.GET("/category/:id", gincategory.GetCategoryById(db))
+		api.POST("/category", gincategory.CreateCategory(db))
+		api.PUT("/category/:id", gincategory.UpdatCategoryByID(db))
 	}
 	router.Run()
 }
