@@ -5,9 +5,15 @@ import (
 	"BookHub/module/book/model"
 	"context"
 	"errors"
+
+	"gorm.io/gorm"
 )
 
-func (s *sqlStore) GetBook(ctx context.Context, cond map[string]interface{}) (book *model.Book, err error) {
+func (s *sqlStore) GetBookById(ctx context.Context, cond map[string]interface{}) (book *model.Book, err error) {
+	cond["Books.Deleted"] = false
+	cond["Categories.Deleted"] = false
+	cond["BookAuthors.Deleted"] = false
+	cond["Authors.Deleted"] = false
 	db := s.db.Table(model.Book{}.TableName())
 
 	if err := db.Select("Books.BookID, Books.Title, Books.ISBN, Books.PublishedYear, Categories.CategoryName, Authors.FirstName, Authors.LastName").
@@ -15,7 +21,7 @@ func (s *sqlStore) GetBook(ctx context.Context, cond map[string]interface{}) (bo
 		Joins("join Authors on BookAuthors.AuthorID = Authors.AuthorID").
 		Where(cond).
 		First(&book).Error; err != nil {
-		if errors.Is(err, common.RecordNotFound) {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, common.RecordNotFound
 		}
 		return nil, common.ErrDB(err)
