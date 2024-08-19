@@ -7,7 +7,7 @@ import (
 )
 
 type GetBookStorage interface {
-	GetBook(ctx context.Context, cond map[string]interface{}) (book *model.Book, err error)
+	GetBookById(ctx context.Context, cond map[string]interface{}) (book *model.Book, err error)
 }
 
 type getBookBiz struct {
@@ -19,9 +19,9 @@ func NewGetBookByIdBiz(store GetBookStorage) *getBookBiz {
 }
 
 func (biz *getBookBiz) GetBookById(ctx context.Context, id int) (book *model.Book, err error) {
-	book, err = biz.store.GetBook(ctx, map[string]interface{}{"Books.BookID": id})
+	book, err = biz.store.GetBookById(ctx, map[string]interface{}{"Books.BookID": id})
 	if err != nil {
-		return nil, common.ErrorCannotGetEntity(model.EntityName, err)
+		return nil, common.ErrCannotGetEntity(model.EntityName, err)
 	}
 	return book, nil
 
