@@ -23,23 +23,35 @@ func NewUpdateCategoryBiz(store UpdateCategoryStorage) *updateCategoryBiz {
 }
 
 func (biz *updateCategoryBiz) UpdateCategoryById(ctx context.Context, id int, data *model.CategoryUpdate) (err error) {
-	data.CategoryName = strings.TrimSpace(data.CategoryName)
-	if data.CategoryName == "" {
-		return common.ErrorCannotUpdaterEntity(model.EntityName, model.ErrCategoryNameIsBlank)
+	err = checkBlankCategoryUpdate(data)
+	if err != nil {
+		return common.ErrCannotCreateEntity(model.EntityName, err)
 	}
 
 	_, err = biz.store.GetCategory(ctx, map[string]interface{}{"Categories.CategoryID": id})
 	if err != nil {
 		if errors.Is(err, common.RecordNotFound) {
-			return common.ErrorCannotGetEntity(model.EntityName, err)
+			return common.ErrCannotGetEntity(model.EntityName, err)
 		}
-		return common.ErrorCannotUpdaterEntity(model.EntityName, err)
+		return common.ErrCannotUpdateEntity(model.EntityName, err)
+	}
+
+	if _, err := biz.store.GetCategory(ctx, map[string]interface{}{"Categories.CategoryName": data.CategoryName}); err == nil {
+		return common.ErrEntityExisted(model.EntityName, common.EntityExisted)
 	}
 
 	if err = biz.store.UpdateCategory(ctx, map[string]interface{}{"Categories.CategoryID": id}, data); err != nil {
-		return common.ErrorCannotCreateEntity(model.EntityName, err)
+		return common.ErrCannotUpdateEntity(model.EntityName, err)
 	}
 
 	return nil
 
+}
+
+func checkBlankCategoryUpdate(data *model.CategoryUpdate) error {
+	data.CategoryName = strings.TrimSpace(data.CategoryName)
+	if data.CategoryName == "" {
+		return model.ErrCategoryNameIsBlank
+	}
+	return nil
 }

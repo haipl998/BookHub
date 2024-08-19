@@ -8,8 +8,12 @@ import (
 )
 
 func (s *sqlStore) ListCategory(ctx context.Context) (result *[]model.Category, err error) {
+	cond := make(map[string]interface{})
+	cond["Categories.Deleted"] = true
+
 	db := s.db.Table(model.Category{}.TableName())
-	if err := db.Find(&result).Error; err != nil {
+
+	if err := db.Where(cond).Find(&result).Error; err != nil {
 		return nil, common.ErrDB(err)
 	}
 

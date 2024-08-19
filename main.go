@@ -32,6 +32,7 @@ func main() {
 		api.GET("/category/:id", gincategory.GetCategoryById(db))
 		api.POST("/category", gincategory.CreateCategory(db))
 		api.PUT("/category/:id", gincategory.UpdatCategoryByID(db))
+		api.DELETE("/category/:id", gincategory.DeleteCategoryById(db))
 	}
 	router.Run()
 }

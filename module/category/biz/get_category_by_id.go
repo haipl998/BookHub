@@ -22,7 +22,7 @@ func NewGetCategoryBiz(store GetCategoryStorage) *getCategoryBiz {
 func (biz *getCategoryBiz) GetCategoryById(ctx context.Context, id int) (result *model.Category, err error) {
 	result, err = biz.store.GetCategory(ctx, map[string]interface{}{"Categories.CategoryID": id})
 	if err != nil {
-		return nil, common.ErrorCannotGetEntity(model.EntityName, err)
+		return nil, common.ErrCannotGetEntity(model.EntityName, err)
 	}
 	return result, nil
 
