@@ -8,7 +8,7 @@ import (
 )
 
 type ListAuthorStorage interface {
-	ListAuthor(ctx context.Context) (result []model.Authors, err error)
+	ListAuthor(ctx context.Context) (result []model.Author, err error)
 }
 
 type listAuthorBiz struct {
@@ -19,7 +19,7 @@ func NewListAuthorBiz(store ListAuthorStorage) *listAuthorBiz {
 	return &listAuthorBiz{store: store}
 }
 
-func (biz *listAuthorBiz) ListAuthor(ctx context.Context) (result []model.Authors, err error) {
+func (biz *listAuthorBiz) ListAuthor(ctx context.Context) (result []model.Author, err error) {
 	result, err = biz.store.ListAuthor(ctx)
 	if err != nil {
 		return nil, common.ErrCannotListEntity(model.EntityName, err)

@@ -13,7 +13,7 @@ import (
 
 func CreateAuthor(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var data model.Authors
+		var data model.Author
 		if err := c.ShouldBind(&data); err != nil {
 			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 			return

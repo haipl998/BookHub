@@ -33,6 +33,7 @@ func main() {
 		api.GET("/author/:id", ginauthor.GetAuthorById(db))
 		api.POST("/author", ginauthor.CreateAuthor(db))
 		api.PUT("/author/:id", ginauthor.UpdatAuthorByID(db))
+		api.DELETE("/author/:id", ginauthor.DeleteAuthorById(db))
 	}
 	router.Run()
 }

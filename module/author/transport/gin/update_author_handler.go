@@ -31,7 +31,7 @@ func UpdatAuthorByID(db *gorm.DB) gin.HandlerFunc {
 		store := storage.NewSQLStore(db)
 		business := biz.NewUpdateAuthorBiz(store)
 
-		if err := business.UpdateAuthor(c.Request.Context(), &data, id); err != nil {
+		if err := business.UpdateAuthorById(c.Request.Context(), &data, id); err != nil {
 			c.JSON(http.StatusBadRequest, err)
 			return
 		}

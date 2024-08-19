@@ -12,7 +12,7 @@ var (
 	ErrBothIsBlank      = errors.New("both first name and last name be blank")
 )
 
-type Authors struct {
+type Author struct {
 	AuthorID  int    `json:"AuthorID,omitempty" gorm:"primaryKey;column:AuthorID"`
 	FirstName string `json:"FirstName" gorm:"column:FirstName"`
 	LastName  string `json:"LastName" gorm:"column:LastName"`
@@ -23,5 +23,5 @@ type AuthorUpdate struct {
 	LastName  string `json:"LastName,omitempty" gorm:"column:LastName"`
 }
 
-func (Authors) TableName() string      { return "Authors" }
-func (AuthorUpdate) TableName() string { return Authors{}.TableName() }
+func (Author) TableName() string       { return "Authors" }
+func (AuthorUpdate) TableName() string { return Author{}.TableName() }

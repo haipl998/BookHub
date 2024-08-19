@@ -7,10 +7,12 @@ import (
 	"context"
 )
 
-func (s *sqlStore) ListAuthor(ctx context.Context) (result []model.Authors, err error) {
-	db := s.db.Table(model.Authors{}.TableName())
+func (s *sqlStore) ListAuthor(ctx context.Context) (result []model.Author, err error) {
+	cond := make(map[string]interface{})
+	cond["Authors.Deleted"] = false
+	db := s.db.Table(model.Author{}.TableName())
 
-	if err := db.Find(&result).Error; err != nil {
+	if err := db.Where(cond).Find(&result).Error; err != nil {
 		return nil, common.ErrDB(err)
 	}
 	return result, nil
