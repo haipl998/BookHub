@@ -83,36 +83,36 @@ func ErrCannotListEntity(entity string, err error) *AppError {
 	return NewCustomError(err, fmt.Sprintf("Cannot list %s", strings.ToLower(entity)), fmt.Sprintf("ErrorCannotList%s", entity))
 }
 
-func ErrorCannotDeleteEntity(entity string, err error) *AppError {
+func ErrCannotDeleteEntity(entity string, err error) *AppError {
 	return NewCustomError(err, fmt.Sprintf("Cannot delete %s", strings.ToLower(entity)), fmt.Sprintf("ErrorCannotDelete%s", entity))
 }
 
-func ErrorCannotUpdaterEntity(entity string, err error) *AppError {
+func ErrCannotUpdateEntity(entity string, err error) *AppError {
 	return NewCustomError(err, fmt.Sprintf("Cannot update %s", strings.ToLower(entity)), fmt.Sprintf("ErrorCannotUpdate%s", entity))
 }
 
-func ErrorCannotGetEntity(entity string, err error) *AppError {
+func ErrCannotGetEntity(entity string, err error) *AppError {
 	return NewCustomError(err, fmt.Sprintf("Cannot get %s", strings.ToLower(entity)), fmt.Sprintf("ErrorCannotGet%s", entity))
 }
 
-func ErrorEntityDeleted(entity string, err error) *AppError {
+func ErrEntityDeleted(entity string, err error) *AppError {
 	return NewCustomError(err, fmt.Sprintf("%s deleted", strings.ToLower(entity)), fmt.Sprintf("Error%sDeleted", entity))
 }
 
-func ErrorEntityExisted(entity string, err error) *AppError {
+func ErrEntityExisted(entity string, err error) *AppError {
 	return NewCustomError(err, fmt.Sprintf("%s already exists", strings.ToLower(entity)), fmt.Sprintf("Error%sAlreadyExists", entity))
 }
 
-func ErrorEntityNotFound(entity string, err error) *AppError {
+func ErrEntityNotFound(entity string, err error) *AppError {
 	return NewCustomError(err, fmt.Sprintf("%s not found", strings.ToLower(entity)), fmt.Sprintf("Error%sNotFound", entity))
 }
 
-func ErrorCannotCreateEntity(entity string, err error) *AppError {
+func ErrCannotCreateEntity(entity string, err error) *AppError {
 	return NewCustomError(err, fmt.Sprintf("Cannot create %s", strings.ToLower(entity)), fmt.Sprintf("ErrorCannotCreate%s", entity))
 }
 
-func ErrorPermission(err error) *AppError {
-	return NewCustomError(err, "You have no permission", "ErrorNOPermission")
+func ErrPermission(err error) *AppError {
+	return NewCustomError(err, "You have no permission", "ErrorNoPermission")
 }
 
 var RecordNotFound = errors.New("record not found")
