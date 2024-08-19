@@ -22,11 +22,11 @@ func main() {
 	api := router.Group("/api")
 	{
 		//book
-		api.GET("/book", ginbook.GetListOfBooks(db))        // get list book
-		api.GET("/book/:id", ginbook.GetBookById(db))       // get book by id
-		api.POST("/book", ginbook.CreateBook(db))           // create new book
-		api.PUT("/book/:id", ginbook.UpdateBookById(db))    // update book
-		api.DELETE("/book/:id", ginbook.DeleteBookById(db)) // delete book
+		api.GET("/book", ginbook.GetListOfBooks(db))
+		api.GET("/book/:id", ginbook.GetBookById(db))
+		api.POST("/book", ginbook.CreateBook(db))
+		api.PUT("/book/:id", ginbook.UpdateBookById(db))
+		api.DELETE("/book/:id", ginbook.DeleteBookById(db))
 
 		//author
 		api.GET("/author", ginauthor.GetListOfAuthors(db))
