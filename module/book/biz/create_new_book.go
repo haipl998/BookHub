@@ -20,6 +20,19 @@ func NewCreateBookBiz(store CreateBookStorage) *createBookBiz {
 }
 
 func (biz *createBookBiz) CreateBook(ctx context.Context, book *model.Book) (err error) {
+	err = checkBlank(book)
+	if err != nil {
+		return common.ErrCannotCreateEntity(model.EntityName, err)
+	}
+
+	if err = biz.store.CreateBook(ctx, book); err != nil {
+		return common.ErrCannotCreateEntity(model.EntityName, err)
+	}
+	return nil
+
+}
+
+func checkBlank(book *model.Book) error {
 	book.Title = strings.TrimSpace(book.Title)
 	if book.Title == "" {
 		return model.ErrTitleIsBlank
@@ -40,9 +53,5 @@ func (biz *createBookBiz) CreateBook(ctx context.Context, book *model.Book) (err
 		return model.ErrLastNameIsBlank
 	}
 
-	if err = biz.store.CreateBook(ctx, book); err != nil {
-		return common.ErrorCannotCreateEntity(model.EntityName, err)
-	}
 	return nil
-
 }
