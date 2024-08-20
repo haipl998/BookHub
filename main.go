@@ -32,6 +32,7 @@ func main() {
 		api.GET("/loan/:id", ginloan.GetLoanById(db))
 		api.POST("/loan", ginloan.CreatetLoan(db))
 		api.PUT("loan/:id", ginloan.UpdateLoan(db))
+		api.DELETE("loan/:id", ginloan.DeleteLoanById(db))
 	}
 	router.Run()
 }

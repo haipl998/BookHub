@@ -8,7 +8,9 @@ import (
 )
 
 func (s *sqlStore) CreateLoan(ctx context.Context, data *model.LoanCreation) (err error) {
-	if err := s.db.Create(data).Error; err != nil {
+	cond := make(map[string]interface{})
+	cond["Loans.Deleted"] = false
+	if err := s.db.Where(cond).Create(data).Error; err != nil {
 		return common.ErrDB(err)
 	}
 

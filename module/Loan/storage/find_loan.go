@@ -10,7 +10,8 @@ import (
 )
 
 func (s *sqlStore) GetLoan(ctx context.Context, cond map[string]interface{}) (result *model.Loan, err error) {
-	if err := s.db.First(&result, cond).Error; err != nil {
+	cond["Loans.Deleted"] = false
+	if err := s.db.Where(cond).First(&result).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, common.RecordNotFound
 		}

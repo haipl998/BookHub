@@ -1,9 +1,17 @@
 package model
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
 const (
 	EntityName = "loan"
+)
+
+var (
+	ErrBookIDIsBlank   = errors.New("bookID cannot be blank")
+	ErrMemberIDIsBlank = errors.New("memberID cannot be blank")
 )
 
 type Loan struct {
