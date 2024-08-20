@@ -32,6 +32,7 @@ func main() {
 		api.GET("/member/:id", ginmember.GetMemberById(db))
 		api.POST("/member", ginmember.CreateMember(db))
 		api.PUT("/member/:id", ginmember.UpdateMemberById(db))
+		api.DELETE("member/:id", ginmember.DeleteMemberById(db))
 	}
 	router.Run()
 }

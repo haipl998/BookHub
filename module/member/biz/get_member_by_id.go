@@ -8,7 +8,7 @@ import (
 )
 
 type GetMemberStorage interface {
-	GetMemberByID(ctx context.Context, cond map[string]interface{}) (result *model.Member, err error)
+	GetMember(ctx context.Context, cond map[string]interface{}) (result *model.Member, err error)
 }
 
 type getMemberBiz struct {
@@ -20,9 +20,9 @@ func NewGetMemberBiz(store GetMemberStorage) *getMemberBiz {
 }
 
 func (biz *getMemberBiz) GetMemberByID(ctx context.Context, id int) (result *model.Member, err error) {
-	result, err = biz.store.GetMemberByID(ctx, map[string]interface{}{"Members.MemberID": id})
+	result, err = biz.store.GetMember(ctx, map[string]interface{}{"Members.MemberID": id})
 	if err != nil {
-		return nil, common.ErrorCannotGetEntity(model.EntityName, err)
+		return nil, common.ErrCannotGetEntity(model.EntityName, err)
 	}
 	return result, nil
 

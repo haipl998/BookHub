@@ -10,8 +10,12 @@ const (
 )
 
 var (
-	ErrEmailExists       = errors.New("email already exists")
-	ErrPhoneNumberExists = errors.New("phone number already exists")
+	ErrEmailExists        = errors.New("email already exists")
+	ErrPhoneNumberExists  = errors.New("phone number already exists")
+	ErrEmailIsBlank       = errors.New("title cannot be blank")
+	ErrPhoneNumberIsBlank = errors.New("category name cannot be blank")
+	ErrFirstNameIsBlank   = errors.New("first name cannot be blank")
+	ErrLastNameIsBlank    = errors.New("last name cannot be blank")
 )
 
 type Member struct {
