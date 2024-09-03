@@ -1,10 +1,10 @@
-package ginmember
+package gin_member
 
 import (
 	"BookHub/common"
-	"BookHub/module/member/biz"
-	"BookHub/module/member/model"
-	"BookHub/module/member/storage"
+	biz_member "BookHub/module/member/biz"
+	model_member "BookHub/module/member/model"
+	storage_member "BookHub/module/member/storage"
 	"net/http"
 	"strconv"
 
@@ -20,20 +20,20 @@ func UpdateMemberById(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		var data model.MemberUpdate
+		var data model_member.MemberUpdate
 		if err := c.ShouldBind(&data); err != nil {
 			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 			return
 		}
 
-		store := storage.NewSQLStore(db)
-		business := biz.NewUpdateMemberBiz(store)
+		store := storage_member.NewSQLStore(db)
+		business := biz_member.NewUpdateMemberBiz(store)
 
 		if err := business.UpdateMember(c.Request.Context(), &data, id); err != nil {
 			c.JSON(http.StatusBadRequest, err)
 			return
 		}
 
-		c.JSON(http.StatusOK, common.SimpleSuccessResponse("true"))
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse("updata member successful"))
 	}
 }

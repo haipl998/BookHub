@@ -1,4 +1,4 @@
-package storage
+package storage_member
 
 import (
 	"BookHub/common"

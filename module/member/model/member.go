@@ -1,8 +1,10 @@
-package model
+package model_member
 
 import (
 	"errors"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 const (
@@ -16,6 +18,7 @@ var (
 	ErrPhoneNumberIsBlank = errors.New("category name cannot be blank")
 	ErrFirstNameIsBlank   = errors.New("first name cannot be blank")
 	ErrLastNameIsBlank    = errors.New("last name cannot be blank")
+	ErrInvalidCredentials = errors.New("invalid credentials")
 )
 
 type Member struct {
@@ -32,7 +35,41 @@ type MemberUpdate struct {
 	LastName    string `json:"LastName,omitempty" gorm:"column:LastName"`
 	Email       string `json:"Email,omitempty" gorm:"column:Email"`
 	PhoneNumber string `json:"PhoneNumber,omitempty" gorm:"column:PhoneNumber"`
+	Password    string `json:"Password"`
 }
 
-func (Member) TableName() string       { return "Members" }
-func (MemberUpdate) TableName() string { return Member{}.TableName() }
+type MemberCreation struct {
+	MemberID    int       `json:"MemberID,omitempty" gorm:"primaryKey;column:MemberID"`
+	FirstName   string    `json:"FirstName" gorm:"column:FirstName"`
+	LastName    string    `json:"LastName" gorm:"column:LastName"`
+	Email       string    `json:"Email" gorm:"column:Email"`
+	PhoneNumber string    `json:"PhoneNumber" gorm:"column:PhoneNumber"`
+	JoinDate    time.Time `json:"JoinDate" gorm:"column:JoinDate"`
+	Password    string    `json:"Password"`
+	Role        string    `json:"Role"`
+}
+
+type SessionMember struct {
+	MemberID    int    `json:"MemberID,omitempty" gorm:"primaryKey;column:MemberID"`
+	Email       string `json:"Email" gorm:"column:Email"`
+	PhoneNumber string `json:"PhoneNumber" gorm:"column:PhoneNumber"`
+	Password    string `json:"-"`
+	Role        string `json:"Role"`
+}
+
+type LoginForm struct {
+	Email    string `json:"Email"`
+	Password string `json:"Password"`
+}
+
+type Claims struct {
+	MemberID int
+	Email    string
+	Role     string // Thêm vai trò vào claims
+	jwt.StandardClaims
+}
+
+func (Member) TableName() string         { return "Members" }
+func (MemberUpdate) TableName() string   { return Member{}.TableName() }
+func (MemberCreation) TableName() string { return Member{}.TableName() }
+func (SessionMember) TableName() string  { return Member{}.TableName() }

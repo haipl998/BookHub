@@ -1,9 +1,9 @@
-package ginmember
+package gin_member
 
 import (
 	"BookHub/common"
-	"BookHub/module/member/biz"
-	"BookHub/module/member/storage"
+	biz_member "BookHub/module/member/biz"
+	storage_member "BookHub/module/member/storage"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,8 +12,8 @@ import (
 
 func GetListOfMembers(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		store := storage.NewSQLStore(db)
-		business := biz.NewListMemberBiz(store)
+		store := storage_member.NewSQLStore(db)
+		business := biz_member.NewListMemberBiz(store)
 
 		result, err := business.ListMember(c.Request.Context())
 		if err != nil {

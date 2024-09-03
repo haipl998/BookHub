@@ -1,9 +1,9 @@
-package ginmember
+package gin_member
 
 import (
 	"BookHub/common"
-	"BookHub/module/member/biz"
-	"BookHub/module/member/storage"
+	biz_member "BookHub/module/member/biz"
+	storage_member "BookHub/module/member/storage"
 	"net/http"
 	"strconv"
 
@@ -19,8 +19,8 @@ func GetMemberById(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		store := storage.NewSQLStore(db)
-		business := biz.NewGetMemberBiz(store)
+		store := storage_member.NewSQLStore(db)
+		business := biz_member.NewGetMemberBiz(store)
 
 		result, err := business.GetMemberByID(c.Request.Context(), id)
 		if err != nil {

@@ -111,6 +111,10 @@ func ErrCannotCreateEntity(entity string, err error) *AppError {
 	return NewCustomError(err, fmt.Sprintf("Cannot create %s", strings.ToLower(entity)), fmt.Sprintf("ErrorCannotCreate%s", entity))
 }
 
+func ErrCannotLogin(err error) *AppError {
+	return NewCustomError(err, "you can not login", "ErrorCannotLogin")
+}
+
 func ErrPermission(err error) *AppError {
 	return NewCustomError(err, "You have no permission", "ErrorNoPermission")
 }
