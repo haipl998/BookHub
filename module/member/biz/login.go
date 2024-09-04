@@ -57,7 +57,7 @@ func (biz *loginBiz) Login(ctx context.Context, data *model_member.LoginForm) (c
 
 func GenerateJWT(member model_member.SessionMember) (string, error) {
 	// Tạo claims
-	claims := model_member.Claims{
+	claims := common.Claims{
 		MemberID: member.MemberID,
 		Email:    member.Email,
 		Role:     member.Role, // Vai trò của người dùng

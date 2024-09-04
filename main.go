@@ -33,7 +33,7 @@ func main() {
 		api.DELETE("/book/:id", middleware.OnlyAdmin(), ginbook.DeleteBookById(db)) // delete book
 
 		//memmber
-		api.POST("/member/register", middleware.OnlyAdmin(), gin_member.Register(db))
+		api.POST("/member/register", middleware.OnlyAdmin(), middleware.ValidateEmailAndPhone(), gin_member.Register(db))
 		api.GET("/member", middleware.OnlyAdmin(), gin_member.GetListOfMembers(db))
 		api.GET("/member/:id", middleware.AuthorizeSelf(), gin_member.GetMemberById(db)) // cần xem set lại
 		//api.POST("/member", middleware.OnlyAdmin(), gin_member.CreateMember(db))            // cần xem set lại

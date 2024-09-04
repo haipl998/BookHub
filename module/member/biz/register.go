@@ -40,7 +40,7 @@ func (biz *registerBiz) Register(ctx context.Context, data *model_member.MemberC
 
 	data.JoinDate = time.Now()
 	data.Password = string(hashedPassword)
-	data.Role = "user"
+	data.Role = "member"
 
 	if err = biz.store.RegisterMember(ctx, data); err != nil {
 		return common.ErrCannotCreateEntity(model_member.EntityName, err)

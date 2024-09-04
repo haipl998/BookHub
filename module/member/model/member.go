@@ -2,9 +2,9 @@ package model_member
 
 import (
 	"errors"
+	"log"
+	"strings"
 	"time"
-
-	"github.com/dgrijalva/jwt-go"
 )
 
 const (
@@ -12,13 +12,13 @@ const (
 )
 
 var (
-	ErrEmailExists        = errors.New("email already exists")
-	ErrPhoneNumberExists  = errors.New("phone number already exists")
-	ErrEmailIsBlank       = errors.New("title cannot be blank")
-	ErrPhoneNumberIsBlank = errors.New("category name cannot be blank")
-	ErrFirstNameIsBlank   = errors.New("first name cannot be blank")
-	ErrLastNameIsBlank    = errors.New("last name cannot be blank")
-	ErrInvalidCredentials = errors.New("invalid credentials")
+	ErrEmailExists       = errors.New("email already exists")
+	ErrPhoneNumberExists = errors.New("phone number already exists")
+	ErrFirstNameBlank    = errors.New("first name cannot be blank")
+	ErrLastNameBlank     = errors.New("last name cannot be blank")
+	ErrEmailBlank        = errors.New("email cannot be blank")
+	ErrPhoneNumberBlank  = errors.New("phone number cannot be blank")
+	ErrPasswordBlank     = errors.New("password cannot be blank")
 )
 
 type Member struct {
@@ -62,14 +62,54 @@ type LoginForm struct {
 	Password string `json:"Password"`
 }
 
-type Claims struct {
-	MemberID int
-	Email    string
-	Role     string // Thêm vai trò vào claims
-	jwt.StandardClaims
-}
-
 func (Member) TableName() string         { return "Members" }
 func (MemberUpdate) TableName() string   { return Member{}.TableName() }
 func (MemberCreation) TableName() string { return Member{}.TableName() }
 func (SessionMember) TableName() string  { return Member{}.TableName() }
+
+func (mc *MemberCreation) Validate() error {
+	log.Print(mc)
+	if strings.TrimSpace(mc.FirstName) == "" {
+		return ErrFirstNameBlank
+	}
+	if strings.TrimSpace(mc.LastName) == "" {
+		return ErrLastNameBlank
+	}
+	if mc.Email == "" {
+		return ErrEmailBlank
+	}
+	if mc.PhoneNumber == "" {
+		return ErrPhoneNumberBlank
+	}
+	if mc.Password == "" {
+		return ErrPasswordBlank
+	}
+
+	// Add more validations as needed, e.g.:
+	// - Password strength check
+
+	return nil
+}
+
+func (mc *MemberUpdate) Validate() error {
+	if mc.FirstName != "" && strings.TrimSpace(mc.FirstName) == "" {
+		return ErrFirstNameBlank
+	}
+	if mc.LastName != "" && strings.TrimSpace(mc.LastName) == "" {
+		return ErrLastNameBlank
+	}
+	if mc.Email != "" && strings.TrimSpace(mc.Email) == "" {
+		return ErrEmailBlank
+	}
+	if mc.PhoneNumber != "" && strings.TrimSpace(mc.PhoneNumber) == "" {
+		return ErrPhoneNumberBlank
+	}
+	// Kiểm tra mật khẩu nếu được cung cấp
+	if mc.Password != "" && strings.TrimSpace(mc.Password) == "" {
+		return ErrPasswordBlank
+	}
+	// Thêm các kiểm tra khác nếu cần, ví dụ:
+	// - Kiểm tra độ mạnh của mật khẩu
+
+	return nil
+}

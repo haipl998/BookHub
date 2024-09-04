@@ -26,6 +26,11 @@ func UpdateMemberById(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
+		if err := data.Validate(); err != nil {
+			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
+			return
+		}
+
 		store := storage_member.NewSQLStore(db)
 		business := biz_member.NewUpdateMemberBiz(store)
 
