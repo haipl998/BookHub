@@ -1,6 +1,7 @@
 package biz
 
 import (
+	"BookHub/common"
 	"BookHub/module/book/model"
 	"context"
 )
@@ -20,7 +21,7 @@ func NewListBookBiz(store ListBookStorage) *listBookBiz {
 func (biz *listBookBiz) ListBook(ctx context.Context) (result []model.Book, err error) {
 	result, err = biz.store.ListBook(ctx)
 	if err != nil {
-		return nil, err
+		return nil, common.ErrCannotListEntity(model.EntityName, err)
 	}
 	return result, nil
 

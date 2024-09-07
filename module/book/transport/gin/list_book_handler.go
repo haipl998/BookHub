@@ -1,6 +1,7 @@
 package ginbook
 
 import (
+	"BookHub/common"
 	"BookHub/module/book/biz"
 	"BookHub/module/book/storage"
 	"net/http"
@@ -16,9 +17,9 @@ func GetListOfBooks(db *gorm.DB) gin.HandlerFunc {
 
 		result, err := business.ListBook(c.Request.Context())
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusBadRequest, err)
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"data": result})
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(result))
 	}
 }

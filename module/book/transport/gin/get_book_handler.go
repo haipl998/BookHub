@@ -1,6 +1,7 @@
 package ginbook
 
 import (
+	"BookHub/common"
 	"BookHub/module/book/biz"
 	"BookHub/module/book/storage"
 	"net/http"
@@ -10,11 +11,11 @@ import (
 	"gorm.io/gorm"
 )
 
-func GetBook(db *gorm.DB) gin.HandlerFunc {
+func GetBookById(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 			return
 		}
 
@@ -23,9 +24,9 @@ func GetBook(db *gorm.DB) gin.HandlerFunc {
 
 		result, err := business.GetBookById(c.Request.Context(), id)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusBadRequest, err)
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"data": result})
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(result))
 	}
 }
