@@ -4,6 +4,7 @@ import (
 	"BookHub/middleware"
 	ginauthor "BookHub/module/author/transport/gin"
 	ginbook "BookHub/module/book/transport/gin"
+	gincategory "BookHub/module/category/transport/gin"
 	gin_member "BookHub/module/member/transport/gin"
 	"log"
 
@@ -33,6 +34,17 @@ func main() {
 		api.POST("/book", ginbook.CreateBook(db))
 		api.PUT("/book/:id", ginbook.UpdateBookById(db))
 		api.DELETE("/book/:id", ginbook.DeleteBookById(db))
+
+		// category
+		category := api.Group("/category")
+		category.Use(middleware.OnlyAdmin())
+		{
+			category.GET("/", gincategory.GetCategoryOfCategories(db))
+			category.GET("/:id", gincategory.GetCategoryById(db))
+			category.POST("/", gincategory.CreateCategory(db))
+			category.PUT("/:id", gincategory.UpdatCategoryByID(db))
+			category.DELETE("/:id", gincategory.DeleteCategoryById(db))
+		}
 
 		//author
 		author := api.Group("/author")
