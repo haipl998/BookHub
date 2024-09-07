@@ -1,8 +1,10 @@
 package main
 
 import (
+	"BookHub/middleware"
 	ginauthor "BookHub/module/author/transport/gin"
 	ginbook "BookHub/module/book/transport/gin"
+	gin_member "BookHub/module/member/transport/gin"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -19,7 +21,11 @@ func main() {
 
 	router := gin.Default()
 
+	router.POST("/login", gin_member.Login(db))
+	router.GET("/logout", middleware.AuthenticateJWT(), gin_member.Logout())
+
 	api := router.Group("/api")
+	api.Use(middleware.AuthenticateJWT())
 	{
 		//book
 		api.GET("/book", ginbook.GetListOfBooks(db))
@@ -34,6 +40,14 @@ func main() {
 		api.POST("/author", ginauthor.CreateAuthor(db))
 		api.PUT("/author/:id", ginauthor.UpdatAuthorByID(db))
 		api.DELETE("/author/:id", ginauthor.DeleteAuthorById(db))
+
+		//memmber
+		api.POST("/member/register", middleware.OnlyAdmin(), middleware.ValidateEmailAndPhone(), gin_member.Register(db))
+		api.GET("/member", middleware.OnlyAdmin(), gin_member.GetListOfMembers(db))
+		api.GET("/member/:id", middleware.AuthorizeSelf(), gin_member.GetMemberById(db)) // cần xem set lại
+		//api.POST("/member", middleware.OnlyAdmin(), gin_member.CreateMember(db))            // cần xem set lại
+		api.PUT("/member/:id", middleware.AuthorizeSelf(), gin_member.UpdateMemberById(db)) // cần xem set lại
+		api.DELETE("member/:id", middleware.OnlyAdmin(), gin_member.DeleteMemberById(db))
 	}
 	router.Run()
 }
