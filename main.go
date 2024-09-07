@@ -2,6 +2,7 @@ package main
 
 import (
 	"BookHub/middleware"
+	ginauthor "BookHub/module/author/transport/gin"
 	ginbook "BookHub/module/book/transport/gin"
 	gin_member "BookHub/module/member/transport/gin"
 	"log"
@@ -26,18 +27,29 @@ func main() {
 	api := router.Group("/api")
 	api.Use(middleware.AuthenticateJWT())
 	{
-		api.GET("/book", ginbook.GetListOfBooks(db))                                // get list book
-		api.GET("/book/:id", ginbook.GetBookById(db))                               // get book by id
-		api.POST("/book", middleware.OnlyAdmin(), ginbook.CreateBook(db))           // create new book
-		api.PUT("/book/:id", middleware.OnlyAdmin(), ginbook.UpdateBookById(db))    // update book
-		api.DELETE("/book/:id", middleware.OnlyAdmin(), ginbook.DeleteBookById(db)) // delete book
+		//book
+		api.GET("/book", ginbook.GetListOfBooks(db))
+		api.GET("/book/:id", ginbook.GetBookById(db))
+		api.POST("/book", ginbook.CreateBook(db))
+		api.PUT("/book/:id", ginbook.UpdateBookById(db))
+		api.DELETE("/book/:id", ginbook.DeleteBookById(db))
+
+		//author
+		author := api.Group("/author")
+		author.Use(middleware.OnlyAdmin())
+		{
+			author.GET("/", ginauthor.GetListOfAuthors(db))
+			author.GET("/:id", ginauthor.GetAuthorById(db))
+			author.POST("/", ginauthor.CreateAuthor(db))
+			author.PUT("/:id", ginauthor.UpdatAuthorByID(db))
+			author.DELETE("/:id", ginauthor.DeleteAuthorById(db))
+		}
 
 		//memmber
 		api.POST("/member/register", middleware.OnlyAdmin(), middleware.ValidateEmailAndPhone(), gin_member.Register(db))
 		api.GET("/member", middleware.OnlyAdmin(), gin_member.GetListOfMembers(db))
-		api.GET("/member/:id", middleware.AuthorizeSelf(), gin_member.GetMemberById(db)) // cần xem set lại
-		//api.POST("/member", middleware.OnlyAdmin(), gin_member.CreateMember(db))            // cần xem set lại
-		api.PUT("/member/:id", middleware.AuthorizeSelf(), gin_member.UpdateMemberById(db)) // cần xem set lại
+		api.GET("/member/:id", middleware.AuthorizeSelf(), gin_member.GetMemberById(db))
+		api.PUT("/member/:id", middleware.AuthorizeSelf(), gin_member.UpdateMemberById(db))
 		api.DELETE("member/:id", middleware.OnlyAdmin(), gin_member.DeleteMemberById(db))
 	}
 	router.Run()
