@@ -7,11 +7,10 @@ import (
 	"context"
 )
 
-func (s *sqlStore) ListLoan(ctx context.Context) (result *[]model.Loan, err error) {
-	db := s.db.Table(model.Loan{}.TableName())
-
-	if err := db.Find(&result).Error; err != nil {
-		return nil, common.ErrDB(err)
+func (s *sqlStore) CreateLoan(ctx context.Context, data *model.LoanCreation) (err error) {
+	if err := s.db.Create(data).Error; err != nil {
+		return common.ErrDB(err)
 	}
-	return result, nil
+
+	return nil
 }

@@ -67,13 +67,13 @@ func main() {
 
 		//Loan
 		loan := api.Group("/loan")
-		loan.Use(middleware.OnlyAdmin())
+		loan.Use(middleware.AuthorizeSelf())
 		{
-			loan.GET("/", ginloan.GetListOfLoans(db))
+			loan.GET("/", middleware.OnlyAdmin(), ginloan.GetListOfLoans(db))
 			loan.GET("/:id", ginloan.GetLoanById(db))
-			loan.POST("/", ginloan.CreatetLoan(db))
+			loan.POST("/", middleware.OnlyAdmin(), ginloan.CreatetLoan(db))
 			loan.PUT("/:id", ginloan.UpdateLoan(db))
-			loan.DELETE("/:id", ginloan.DeleteLoanById(db))
+			loan.DELETE("/:id", middleware.OnlyAdmin(), ginloan.DeleteLoanById(db))
 		}
 	}
 	router.Run()

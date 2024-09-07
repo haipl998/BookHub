@@ -21,8 +21,7 @@ func NewCreateLoanBiz(store CreateLoanStorage) *createLoanBiz {
 }
 
 func (biz *createLoanBiz) CreateLoan(ctx context.Context, data *model.LoanCreation) (err error) {
-	//Todo check ca truong khong duoc phep chong
-	if err = checkBlankLoanCreation(data); err != nil {
+	if err = data.Validate(); err != nil {
 		return common.ErrCannotCreateEntity(model.EntityName, err)
 	}
 
@@ -34,17 +33,5 @@ func (biz *createLoanBiz) CreateLoan(ctx context.Context, data *model.LoanCreati
 	if err = biz.store.CreateLoan(ctx, data); err != nil {
 		return common.ErrCannotCreateEntity(model.EntityName, err)
 	}
-	return nil
-}
-
-func checkBlankLoanCreation(data *model.LoanCreation) error {
-	if data.BookID == 0 {
-		return model.ErrBookIDIsBlank
-	}
-
-	if data.MemberID == 0 {
-		return model.ErrMemberIDIsBlank
-	}
-
 	return nil
 }

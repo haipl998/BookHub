@@ -7,12 +7,14 @@ import (
 	"context"
 )
 
-func (s *sqlStore) CreateLoan(ctx context.Context, data *model.LoanCreation) (err error) {
+func (s *sqlStore) ListLoan(ctx context.Context) (result *[]model.Loan, err error) {
 	cond := make(map[string]interface{})
 	cond["Loans.Deleted"] = false
-	if err := s.db.Where(cond).Create(data).Error; err != nil {
-		return common.ErrDB(err)
-	}
 
-	return nil
+	db := s.db.Table(model.Loan{}.TableName())
+
+	if err := db.Where(cond).Find(&result).Error; err != nil {
+		return nil, common.ErrDB(err)
+	}
+	return result, nil
 }

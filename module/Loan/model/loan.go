@@ -39,3 +39,13 @@ type LoanUpdate struct {
 func (Loan) TableName() string         { return "Loans" }
 func (LoanCreation) TableName() string { return Loan{}.TableName() }
 func (LoanUpdate) TableName() string   { return Loan{}.TableName() }
+
+func (lc *LoanCreation) Validate() error {
+	if lc.BookID == 0 {
+		return ErrBookIDIsBlank
+	}
+	if lc.MemberID == 0 {
+		return ErrMemberIDIsBlank
+	}
+	return nil
+}
