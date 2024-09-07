@@ -11,7 +11,7 @@ import (
 )
 
 func (s *sqlStore) GetCategory(ctx context.Context, cond map[string]interface{}) (result *model.Category, err error) {
-	cond["Categories.Deleted"] = true
+	cond["Categories.Deleted"] = false
 
 	db := s.db.Table(model.Category{}.TableName())
 

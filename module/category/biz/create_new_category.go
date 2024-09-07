@@ -3,7 +3,6 @@ package biz
 import (
 	"BookHub/common"
 	"BookHub/module/category/model"
-	"strings"
 
 	"context"
 )
@@ -22,7 +21,7 @@ func NewCreateCategoryBiz(store CreateCategoryStorage) *createCategoryBiz {
 }
 
 func (biz *createCategoryBiz) CreateCategory(ctx context.Context, data *model.Category) (err error) {
-	err = checkBlankCategory(data)
+	err = data.Validate()
 	if err != nil {
 		return common.ErrCannotCreateEntity(model.EntityName, err)
 	}
@@ -33,14 +32,6 @@ func (biz *createCategoryBiz) CreateCategory(ctx context.Context, data *model.Ca
 
 	if err = biz.store.CreateCategory(ctx, data); err != nil {
 		return common.ErrCannotCreateEntity(model.EntityName, err)
-	}
-	return nil
-}
-
-func checkBlankCategory(data *model.Category) error {
-	data.CategoryName = strings.TrimSpace(data.CategoryName)
-	if data.CategoryName == "" {
-		return model.ErrCategoryNameIsBlank
 	}
 	return nil
 }

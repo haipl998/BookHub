@@ -9,7 +9,7 @@ import (
 
 func (s *sqlStore) ListCategory(ctx context.Context) (result *[]model.Category, err error) {
 	cond := make(map[string]interface{})
-	cond["Categories.Deleted"] = true
+	cond["Categories.Deleted"] = false
 
 	db := s.db.Table(model.Category{}.TableName())
 

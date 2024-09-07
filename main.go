@@ -36,11 +36,16 @@ func main() {
 		api.DELETE("/book/:id", ginbook.DeleteBookById(db))
 
 		// category
-		api.GET("/category", gincategory.GetCategoryOfCategories(db))
-		api.GET("/category/:id", gincategory.GetCategoryById(db))
-		api.POST("/category", gincategory.CreateCategory(db))
-		api.PUT("/category/:id", gincategory.UpdatCategoryByID(db))
-		api.DELETE("/category/:id", gincategory.DeleteCategoryById(db))
+		category := api.Group("/category")
+		category.Use(middleware.OnlyAdmin())
+		{
+			category.GET("/", gincategory.GetCategoryOfCategories(db))
+			category.GET("/:id", gincategory.GetCategoryById(db))
+			category.POST("/", gincategory.CreateCategory(db))
+			category.PUT("/:id", gincategory.UpdatCategoryByID(db))
+			category.DELETE("/:id", gincategory.DeleteCategoryById(db))
+		}
+
 		//author
 		author := api.Group("/author")
 		author.Use(middleware.OnlyAdmin())

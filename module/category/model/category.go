@@ -1,6 +1,9 @@
 package model
 
-import "errors"
+import (
+	"errors"
+	"strings"
+)
 
 const (
 	EntityName = "category"
@@ -21,3 +24,17 @@ type CategoryUpdate struct {
 
 func (Category) TableName() string       { return "Categories" }
 func (CategoryUpdate) TableName() string { return Category{}.TableName() }
+
+func (c *Category) Validate() error {
+	if strings.TrimSpace(c.CategoryName) == "" {
+		return ErrCategoryNameIsBlank
+	}
+	return nil
+}
+
+func (cu *CategoryUpdate) Validate() error {
+	if strings.TrimSpace(cu.CategoryName) == "" {
+		return ErrCategoryNameIsBlank
+	}
+	return nil
+}

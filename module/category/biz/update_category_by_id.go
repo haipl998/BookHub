@@ -4,7 +4,6 @@ import (
 	"BookHub/common"
 	"BookHub/module/category/model"
 	"errors"
-	"strings"
 
 	"context"
 )
@@ -23,17 +22,16 @@ func NewUpdateCategoryBiz(store UpdateCategoryStorage) *updateCategoryBiz {
 }
 
 func (biz *updateCategoryBiz) UpdateCategoryById(ctx context.Context, id int, data *model.CategoryUpdate) (err error) {
-	err = checkBlankCategoryUpdate(data)
-	if err != nil {
-		return common.ErrCannotCreateEntity(model.EntityName, err)
-	}
-
 	_, err = biz.store.GetCategory(ctx, map[string]interface{}{"Categories.CategoryID": id})
 	if err != nil {
 		if errors.Is(err, common.RecordNotFound) {
 			return common.ErrCannotGetEntity(model.EntityName, err)
 		}
 		return common.ErrCannotUpdateEntity(model.EntityName, err)
+	}
+
+	if err := data.Validate(); err != nil {
+		return common.ErrCannotCreateEntity(model.EntityName, err)
 	}
 
 	if _, err := biz.store.GetCategory(ctx, map[string]interface{}{"Categories.CategoryName": data.CategoryName}); err == nil {
@@ -46,12 +44,4 @@ func (biz *updateCategoryBiz) UpdateCategoryById(ctx context.Context, id int, da
 
 	return nil
 
-}
-
-func checkBlankCategoryUpdate(data *model.CategoryUpdate) error {
-	data.CategoryName = strings.TrimSpace(data.CategoryName)
-	if data.CategoryName == "" {
-		return model.ErrCategoryNameIsBlank
-	}
-	return nil
 }
