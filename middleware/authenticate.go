@@ -77,17 +77,27 @@ func AuthorizeSelf() gin.HandlerFunc {
 			return
 		}
 
-		memberID, err := strconv.Atoi(c.Param("id"))
-		if err != nil {
-			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
+		if claims.Role == "admin" {
+			c.Next()
 			return
 		}
 
-		if claims.Role == "admin" || claims.MemberID == memberID {
-			c.Next()
-		} else {
-			c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden - You do not have access"})
-			c.Abort()
+		idParam := c.Param("id")
+		if idParam != "" {
+			memberID, err := strconv.Atoi(idParam)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
+				c.Abort()
+				return
+			}
+
+			if claims.MemberID != memberID {
+				c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden - You do not have access"})
+				c.Abort()
+				return
+			}
 		}
+
+		c.Next()
 	}
 }

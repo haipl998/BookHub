@@ -2,6 +2,7 @@ package main
 
 import (
 	"BookHub/middleware"
+	ginloan "BookHub/module/Loan/transport/gin"
 	ginauthor "BookHub/module/author/transport/gin"
 	ginbook "BookHub/module/book/transport/gin"
 	gincategory "BookHub/module/category/transport/gin"
@@ -63,6 +64,17 @@ func main() {
 		api.GET("/member/:id", middleware.AuthorizeSelf(), gin_member.GetMemberById(db))
 		api.PUT("/member/:id", middleware.AuthorizeSelf(), gin_member.UpdateMemberById(db))
 		api.DELETE("member/:id", middleware.OnlyAdmin(), gin_member.DeleteMemberById(db))
+
+		//Loan
+		loan := api.Group("/loan")
+		loan.Use(middleware.AuthorizeSelf())
+		{
+			loan.GET("/", middleware.OnlyAdmin(), ginloan.GetListOfLoans(db))
+			loan.GET("/:id", ginloan.GetLoanById(db))
+			loan.POST("/", middleware.OnlyAdmin(), ginloan.CreatetLoan(db))
+			loan.PUT("/:id", ginloan.UpdateLoan(db))
+			loan.DELETE("/:id", middleware.OnlyAdmin(), ginloan.DeleteLoanById(db))
+		}
 	}
 	router.Run()
 }
