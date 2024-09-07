@@ -35,18 +35,21 @@ func main() {
 		api.DELETE("/book/:id", ginbook.DeleteBookById(db))
 
 		//author
-		api.GET("/author", ginauthor.GetListOfAuthors(db))
-		api.GET("/author/:id", ginauthor.GetAuthorById(db))
-		api.POST("/author", ginauthor.CreateAuthor(db))
-		api.PUT("/author/:id", ginauthor.UpdatAuthorByID(db))
-		api.DELETE("/author/:id", ginauthor.DeleteAuthorById(db))
+		author := api.Group("/author")
+		author.Use(middleware.OnlyAdmin())
+		{
+			author.GET("/", ginauthor.GetListOfAuthors(db))
+			author.GET("/:id", ginauthor.GetAuthorById(db))
+			author.POST("/", ginauthor.CreateAuthor(db))
+			author.PUT("/:id", ginauthor.UpdatAuthorByID(db))
+			author.DELETE("/:id", ginauthor.DeleteAuthorById(db))
+		}
 
 		//memmber
 		api.POST("/member/register", middleware.OnlyAdmin(), middleware.ValidateEmailAndPhone(), gin_member.Register(db))
 		api.GET("/member", middleware.OnlyAdmin(), gin_member.GetListOfMembers(db))
-		api.GET("/member/:id", middleware.AuthorizeSelf(), gin_member.GetMemberById(db)) // cần xem set lại
-		//api.POST("/member", middleware.OnlyAdmin(), gin_member.CreateMember(db))            // cần xem set lại
-		api.PUT("/member/:id", middleware.AuthorizeSelf(), gin_member.UpdateMemberById(db)) // cần xem set lại
+		api.GET("/member/:id", middleware.AuthorizeSelf(), gin_member.GetMemberById(db))
+		api.PUT("/member/:id", middleware.AuthorizeSelf(), gin_member.UpdateMemberById(db))
 		api.DELETE("member/:id", middleware.OnlyAdmin(), gin_member.DeleteMemberById(db))
 	}
 	router.Run()

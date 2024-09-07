@@ -5,7 +5,6 @@ import (
 	"BookHub/module/author/biz"
 	"BookHub/module/author/model"
 	"BookHub/module/author/storage"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -26,7 +25,6 @@ func UpdatAuthorByID(db *gorm.DB) gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 			return
 		}
-		log.Print(data)
 
 		store := storage.NewSQLStore(db)
 		business := biz.NewUpdateAuthorBiz(store)

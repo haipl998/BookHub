@@ -1,6 +1,9 @@
 package model
 
-import "errors"
+import (
+	"errors"
+	"strings"
+)
 
 const (
 	EntityName = "Author"
@@ -25,3 +28,27 @@ type AuthorUpdate struct {
 
 func (Author) TableName() string       { return "Authors" }
 func (AuthorUpdate) TableName() string { return Author{}.TableName() }
+
+func (a *Author) Validate() error {
+	if strings.TrimSpace(a.FirstName) == "" {
+		return ErrFirstNameIsBlank
+	}
+
+	if strings.TrimSpace(a.LastName) == "" {
+		return ErrLastNameIsBlank
+	}
+
+	return nil
+}
+
+func (au *AuthorUpdate) Validate() error {
+	if au.FirstName != "" && strings.TrimSpace(au.FirstName) == "" {
+		return ErrFirstNameIsBlank
+	}
+
+	if au.LastName != "" && strings.TrimSpace(au.LastName) == "" {
+		return ErrLastNameIsBlank
+	}
+
+	return nil
+}
